@@ -14,11 +14,12 @@ public class App {
 
 
 public static boolean flag=true;
-public static boolean flagRight=true;
-public static boolean flagLeft=true;
-public static boolean flagUp=true;
-public static boolean flagDown=true;
+public static boolean flagRight=false;
+public static boolean flagLeft=false;
+public static boolean flagUp=false;
+public static boolean flagDown=false;
     public static int count;
+    public static  FileWriter fr = null;
     public static ArrayList<Integer> tupeList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
@@ -27,12 +28,12 @@ public static boolean flagDown=true;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите колличество фигур : ");
         count = scanner.nextInt();
-        int[][] cord = new int[count+1][xy];
+        int[][] cord = new int[count][xy];
 
         //берём точку начала отсчёта
         System.out.print("Введите начальные координаты лазера"+'\n'+ "x : ");
         double startX = scanner.nextDouble();
-        System.out.print('\n'+"y : ");
+        System.out.print("y : ");
         double startY = scanner.nextDouble();
 
         for (int i = 1; i <= count; i++) {
@@ -55,6 +56,19 @@ public static boolean flagDown=true;
             System.out.print("y = ");
             cord[i-1][3] =(int) (scanner.nextDouble()-startY);
         }
+        for (Integer s : tupeList) {
+            switch (s){
+                case(1): flagRight=true;
+                break;
+                case(2): flagLeft=true;
+                    break;
+                case(3): flagUp=true;
+                    break;
+                case(4): flagDown=true;
+                    break;
+            }
+
+        }
 
 
 
@@ -67,7 +81,7 @@ public static boolean flagDown=true;
         File workFile=createFile();
         System.out.println("файл создан в мэйне");
 
-        while(flagDown & flagLeft & flagUp &flagRight){
+        while(flagDown | flagLeft | flagUp |flagRight){
             System.out.println("зашли в вайл");
             for(int i = 1; i <= count; i++){
                 System.out.println("Зашли в фор");
@@ -92,6 +106,8 @@ public static boolean flagDown=true;
         System.out.println("вышли из вайла");
         //Вывод списка направлений лазера
 //        System.out.println("Список направлений");
+
+
 //        for (Integer s : tupeList) {
 //            System.out.println(s);
 //        }
@@ -134,8 +150,8 @@ public static boolean flagDown=true;
                 return 0;
             }
             else{
-                String vivod="Move "+ x1+","+ y1+'\n'+"Line "+x1+","+(y2-y1)+'\n';
-                writeFile("vivod");
+                String vivod ="Move "+ x1+","+ y1+'\n'+"Line "+x1+","+(y2-y1)+'\n';
+                writeFile(vivod);
                 x1=+15;
                 return x1;}
         }
@@ -148,7 +164,7 @@ public static boolean flagDown=true;
         }
         else{
             String vivod="Move "+ x2+","+ y1+'\n'+"Line "+x2+","+(y2-y1)+'\n';
-            writeFile("vivod");
+            writeFile(vivod);
             x2=-15;
         return x2;
         }
@@ -163,7 +179,7 @@ public static boolean flagDown=true;
             }
             else{
                 String vivod="Move "+ x2+","+ y2+'\n'+"Line "+x1+","+(y2-y1)+'\n';
-                writeFile("vivod");
+                writeFile(vivod);
                 y2=+15;
                 return y2;
             }
@@ -178,7 +194,7 @@ public static boolean flagDown=true;
             }
             else{
                 String vivod="Move "+ x1+","+ y1+'\n'+"Line "+x2+","+(x2-x1)+'\n';
-                writeFile("vivod");
+                writeFile(vivod);
                 y1=+15;
                 return y1;
             }
@@ -199,25 +215,24 @@ public static boolean flagDown=true;
         }
 
         public static void writeFile(String text){
-            FileWriter fr = null;
             try {
-                fr = new FileWriter("MyFile.txt");
+                 fr = new FileWriter("MyFile.txt");
                 //единократная запись заголовка
                 if(flag){
-                fr.write("""
-                        Move 0,0
-                        Layer 1
-                        Layer 2
-                        """);
+                fr.write("Move 0,0\n" + "Layer 1\n" + "Layer 2\n");
                 flag=false;
                     System.out.println("появилась запись");
                 }
                 //запись остального текста
+                int i=0;
+                fr.write(i);
+                i++;
                 fr.write(text);
                 System.out.println("появилась запись");
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
+            }
+            finally {
                 try {
                     fr.close();
                 } catch (IOException e) {
