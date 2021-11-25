@@ -22,7 +22,7 @@ public static boolean flagDown=false;
     public static  FileWriter fr = null;
     public static ArrayList<Integer> tupeList = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         int xy = 4;
 
         Scanner scanner = new Scanner(System.in);
@@ -56,16 +56,14 @@ public static boolean flagDown=false;
             System.out.print("y = ");
             cord[i-1][3] =(int) (scanner.nextDouble()-startY);
         }
+
+        // обозначаем с какими фигурами продолжится работа
         for (Integer s : tupeList) {
-            switch (s){
-                case(1): flagRight=true;
-                break;
-                case(2): flagLeft=true;
-                    break;
-                case(3): flagUp=true;
-                    break;
-                case(4): flagDown=true;
-                    break;
+            switch (s) {
+                case (1) -> flagRight = true;
+                case (2) -> flagLeft = true;
+                case (3) -> flagUp = true;
+                case (4) -> flagDown = true;
             }
 
         }
@@ -85,20 +83,11 @@ public static boolean flagDown=false;
             System.out.println("зашли в вайл");
             for(int i = 1; i <= count; i++){
                 System.out.println("Зашли в фор");
-                switch (tupeList.get(i-1)){
-                    case (1):
-                        cord[i-1][0]=verticalRright(cord[i-1][0],cord[i-1][1],cord[i-1][2],cord[i-1][3]);
-
-                        break;
-                    case(2):
-                        cord[i-1][2]=verticalLeft(cord[i-1][0],cord[i-1][1],cord[i-1][2],cord[i-1][3]);
-                        break;
-                    case(3):
-                        cord[i-1][3]=horizontalUp(cord[i-1][0],cord[i-1][1],cord[i-1][2],cord[i-1][3]);
-                        break;
-                    case(4):
-                        cord[i-1][1]=horizontalDown(cord[i-1][0],cord[i-1][1],cord[i-1][2],cord[i-1][3]);
-                        break;
+                switch (tupeList.get(i - 1)) {
+                    case (1) -> cord[i - 1][0] = verticalRright(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                    case (2) -> cord[i - 1][2] = verticalLeft(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                    case (3) -> cord[i - 1][3] = horizontalUp(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                    case (4) -> cord[i - 1][1] = horizontalDown(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
                 }
             }
             System.out.println("вышли из фора");
@@ -141,33 +130,29 @@ public static boolean flagDown=false;
 
 
         public static int verticalRright(int x1, int y1, int x2, int y2) {
-
-
-
-            if(x1-14>x2) {
+             if(x1-14>x2) {
                 flagRight = false;
                 System.out.println("flag 1 упал");
-                return 0;
-            }
+             }
             else{
-                String vivod ="Move "+ x1+","+ y1+'\n'+"Line "+x1+","+(y2-y1)+'\n';
+                String vivod ="Move "+ x1+","+ y1+'\n'+"Line "+x1+","+y2+'\n';
                 writeFile(vivod);
-                x1=+15;
-                return x1;}
+                x1 = x1 + 15;
+             }
+            return x1;
         }
 
         public static int verticalLeft(int x1, int y1, int x2, int y2) {
-        if(x2-14<x1){
+        if(x2+14<x1){
             flagLeft = false;
             System.out.println("flag 2 упал");
-            return 0;
         }
         else{
-            String vivod="Move "+ x2+","+ y1+'\n'+"Line "+x2+","+(y2-y1)+'\n';
+            String vivod="Move "+ x2+","+ y1+'\n'+"Line "+x2+","+y2+'\n';
             writeFile(vivod);
-            x2=-15;
-        return x2;
+            x2=x2-15;
         }
+            return x2;
         }
 
 
@@ -175,14 +160,13 @@ public static boolean flagDown=false;
             if(y2-14>y1){
                 System.out.println("flag 3 упал");
                 flagUp = false;
-                return 0;
             }
             else{
-                String vivod="Move "+ x2+","+ y2+'\n'+"Line "+x1+","+(y2-y1)+'\n';
+                String vivod="Move "+ x1+","+ y2+'\n'+"Line "+x2+","+y2+'\n';
                 writeFile(vivod);
-                y2=+15;
-                return y2;
+                y2=y2+15;
             }
+            return y2;
         }
 
 
@@ -190,14 +174,13 @@ public static boolean flagDown=false;
             if(y1+14<y2){
                 flagDown = false;
                 System.out.println("flag 4 упал");
-                return 0;
             }
             else{
-                String vivod="Move "+ x1+","+ y1+'\n'+"Line "+x2+","+(x2-x1)+'\n';
+                String vivod="Move "+ x1+","+ y1+'\n'+"Line "+x2+","+y1+'\n';
                 writeFile(vivod);
-                y1=+15;
-                return y1;
+                y1=y1-15;
             }
+            return y1;
         }
 //-----------------------------------------------------------------------------------------------------------------
         public static File createFile(){
@@ -216,17 +199,19 @@ public static boolean flagDown=false;
 
         public static void writeFile(String text){
             try {
-                 fr = new FileWriter("MyFile.txt");
+                 fr = new FileWriter("MyFile.txt",true);
                 //единократная запись заголовка
                 if(flag){
-                fr.write("Move 0,0\n" + "Layer 1\n" + "Layer 2\n");
+                fr.write("""
+                        Move 0,0
+                        Layer 1
+                        Layer 2
+                        """);
                 flag=false;
                     System.out.println("появилась запись");
                 }
                 //запись остального текста
-                int i=0;
-                fr.write(i);
-                i++;
+
                 fr.write(text);
                 System.out.println("появилась запись");
             } catch (IOException e) {
@@ -261,7 +246,7 @@ public static boolean flagDown=false;
 
         public static void deliteFile(File fileName){
             System.out.println("Файл удалён");
-            fileName.delete();
+              fileName.delete();
         }
 
     }
