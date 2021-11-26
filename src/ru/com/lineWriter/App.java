@@ -7,17 +7,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 
 public class App {
 
 
 public static boolean flag=true;
-//public static boolean flagRight=false;
-//public static boolean flagLeft=false;
-//public static boolean flagUp=false;
-//public static boolean flagDown=false;
+
     public static int count;
     public static  FileWriter fr = null;
     public static ArrayList<Integer> tupeList = new ArrayList<>();
@@ -26,7 +23,6 @@ public static boolean flag=true;
         int xy = 5;
         int outWhile =1;
           Validation valid=new Validation();
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Введите колличество фигур : ");
         count = valid.validCount();
         int[][] cord = new int[count][xy];
