@@ -45,32 +45,22 @@ public static boolean flag=true;
             System.out.println("Вниз : 4");
 
             System.out.println("Введите направление движения лазера в фигуре номер " + i);
-            tupeList.add(scanner.nextInt());
+            tupeList.add(valid.validTupe());
             System.out.println("Введите координаты левого верхнего угла фигуры " + i);
             System.out.print("x = ");
-            cord[i-1][0] =(int)  (scanner.nextDouble()-startX);
+            cord[i-1][0] =(int)  (valid.validCord()-startX);
             System.out.print("y = ");
-            cord[i-1][1] =(int) (scanner.nextDouble()-startY);
-            System.out.println("Ведите координаты правого нижнего угра фигуры " + i);
+            cord[i-1][1] =(int) (valid.validCord()-startY);
+            System.out.println("Ведите координаты правого нижнего угла фигуры " + i);
             System.out.print("x = ");
-            cord[i-1][2] =(int) (scanner.nextDouble()-startX);
+            cord[i-1][2] =(int) (valid.validCordX(cord[i-1][0])-startX);
             System.out.print("y = ");
-            cord[i-1][3] =(int) (scanner.nextDouble()-startY);
+            cord[i-1][3] =(int) (valid.validCordY(cord[i-1][1])-startY);
             //Параметр созданный для повторяющихся направлений
             cord[i-1][4] =1;
         }
 
-        // обозначаем с какими фигурами продолжится работа
 
-//        for (Integer s : tupeList) {
-//            switch (s) {
-//                case (1) -> flagRight = true;
-//                case (2) -> flagLeft = true;
-//                case (3) -> flagUp = true;
-//                case (4) -> flagDown = true;
-//            }
-//
-//        }
 
 
 
@@ -119,18 +109,7 @@ public static boolean flag=true;
 
 
 
-//        System.out.println("Список направлений");
 
-
-//        for (Integer s : tupeList) {
-//            System.out.println(s);
-//        }
-//        System.out.println("Список координат");
-//        for (int i = 0; i < count; i++) {
-//            for (int j = 0; j < xy; j++) {
-//                System.out.print(cord[i][j] + " ");
-//            }
-//        }
 
 
 
