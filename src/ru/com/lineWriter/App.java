@@ -14,27 +14,28 @@ public class App {
 
 
 public static boolean flag=true;
-public static boolean flagRight=false;
-public static boolean flagLeft=false;
-public static boolean flagUp=false;
-public static boolean flagDown=false;
+//public static boolean flagRight=false;
+//public static boolean flagLeft=false;
+//public static boolean flagUp=false;
+//public static boolean flagDown=false;
     public static int count;
     public static  FileWriter fr = null;
     public static ArrayList<Integer> tupeList = new ArrayList<>();
 
     public static void main(String[] args) {
-        int xy = 4;
-
+        int xy = 5;
+        int outWhile =1;
+          Validation valid=new Validation();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите колличество фигур : ");
-        count = scanner.nextInt();
+        count = valid.validCount();
         int[][] cord = new int[count][xy];
 
         //берём точку начала отсчёта
         System.out.print("Введите начальные координаты лазера"+'\n'+ "x : ");
-        double startX = scanner.nextDouble();
+        double startX = valid.validCord();
         System.out.print("y : ");
-        double startY = scanner.nextDouble();
+        double startY = valid.validCord();
 
         for (int i = 1; i <= count; i++) {
 
@@ -55,45 +56,69 @@ public static boolean flagDown=false;
             cord[i-1][2] =(int) (scanner.nextDouble()-startX);
             System.out.print("y = ");
             cord[i-1][3] =(int) (scanner.nextDouble()-startY);
+            //Параметр созданный для повторяющихся направлений
+            cord[i-1][4] =1;
         }
 
         // обозначаем с какими фигурами продолжится работа
-        for (Integer s : tupeList) {
-            switch (s) {
-                case (1) -> flagRight = true;
-                case (2) -> flagLeft = true;
-                case (3) -> flagUp = true;
-                case (4) -> flagDown = true;
-            }
 
-        }
+//        for (Integer s : tupeList) {
+//            switch (s) {
+//                case (1) -> flagRight = true;
+//                case (2) -> flagLeft = true;
+//                case (3) -> flagUp = true;
+//                case (4) -> flagDown = true;
+//            }
+//
+//        }
 
 
 
-        //            int moveX= (int) (x1-startX);
-//            int moveY= (int) (y1-startY);
-//            int moveEndY= (int) (y2-startY);
-//            int moveEndX= (int) (x2-startX);
 
         //создание файла
         File workFile=createFile();
         System.out.println("файл создан в мэйне");
 
-        while(flagDown | flagLeft | flagUp |flagRight){
+        while(outWhile>0){
+            outWhile=0;
             System.out.println("зашли в вайл");
             for(int i = 1; i <= count; i++){
                 System.out.println("Зашли в фор");
                 switch (tupeList.get(i - 1)) {
-                    case (1) -> cord[i - 1][0] = verticalRright(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
-                    case (2) -> cord[i - 1][2] = verticalLeft(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
-                    case (3) -> cord[i - 1][3] = horizontalUp(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
-                    case (4) -> cord[i - 1][1] = horizontalDown(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                    case (1) -> {
+                        cord[i - 1][0] = verticalRright(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        if (cord[i - 1][0]-14 >cord[i - 1][2]){
+                            cord[i - 1][4]=0;
+                        }
+                    }
+                    case (2) ->{cord[i - 1][2] = verticalLeft(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        if (cord[i - 1][2]+14<cord[i - 1][0]){
+                            cord[i - 1][4]=0;
+                        }
+                    }
+                    case (3) -> {cord[i - 1][3] = horizontalUp(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                    if (cord[i - 1][3]-14>cord[i - 1][1]){
+                        cord[i - 1][4]=0;
+                    }
+                    }
+                    case (4) -> {cord[i - 1][1] = horizontalDown(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        if (cord[i - 1][1]+14<cord[i - 1][3]){
+                            cord[i - 1][4]=0;
+                        }
+                    }
                 }
+                outWhile += cord[i - 1][4];
             }
+            writeFile("\n");
+
             System.out.println("вышли из фора");
         }
         System.out.println("вышли из вайла");
         //Вывод списка направлений лазера
+
+
+
+
 //        System.out.println("Список направлений");
 
 
@@ -131,7 +156,7 @@ public static boolean flagDown=false;
 
         public static int verticalRright(int x1, int y1, int x2, int y2) {
              if(x1-14>x2) {
-                flagRight = false;
+               // flagRight = false;
                 System.out.println("flag 1 упал");
              }
             else{
@@ -144,7 +169,7 @@ public static boolean flagDown=false;
 
         public static int verticalLeft(int x1, int y1, int x2, int y2) {
         if(x2+14<x1){
-            flagLeft = false;
+           // flagLeft = false;
             System.out.println("flag 2 упал");
         }
         else{
@@ -159,7 +184,7 @@ public static boolean flagDown=false;
         public static int horizontalUp(int x1, int y1, int x2, int y2) {
             if(y2-14>y1){
                 System.out.println("flag 3 упал");
-                flagUp = false;
+               // flagUp = false;
             }
             else{
                 String vivod="Move "+ x1+","+ y2+'\n'+"Line "+x2+","+y2+'\n';
@@ -172,7 +197,7 @@ public static boolean flagDown=false;
 
         public static int horizontalDown(int x1, int y1, int x2, int y2) {
             if(y1+14<y2){
-                flagDown = false;
+              //  flagDown = false;
                 System.out.println("flag 4 упал");
             }
             else{
@@ -248,6 +273,7 @@ public static boolean flagDown=false;
             System.out.println("Файл удалён");
               fileName.delete();
         }
+
 
     }
 
