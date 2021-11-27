@@ -49,9 +49,9 @@ public static boolean flag=true;
             cord[i-1][1] =(int) (valid.validCord()-startY);
             System.out.println("Ведите координаты правого нижнего угла фигуры " + i);
             System.out.print("x = ");
-            cord[i-1][2] =(int) (valid.validCordX(cord[i-1][0])-startX);
+            cord[i-1][2] =(int) (valid.validCordX((int) (cord[i-1][0]+startX))-startX);
             System.out.print("y = ");
-            cord[i-1][3] =(int) (valid.validCordY(cord[i-1][1])-startY);
+            cord[i-1][3] =(int) (valid.validCordY((int) (cord[i-1][1]+startY))-startY);
             //Параметр созданный для повторяющихся направлений
             cord[i-1][4] =1;
         }
