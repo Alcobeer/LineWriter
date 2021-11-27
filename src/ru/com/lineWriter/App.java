@@ -63,31 +63,33 @@ public static boolean flag=true;
 
         //создание файла
         File workFile=createFile();
-        System.out.println("файл создан в мэйне");
 
+//цикл, проходящий по параметрам и создающий запись в файле
         while(outWhile>0){
             outWhile=0;
-            System.out.println("зашли в вайл");
             for(int i = 1; i <= count; i++){
-                System.out.println("Зашли в фор");
                 switch (tupeList.get(i - 1)) {
                     case (1) -> {
                         cord[i - 1][0] = verticalRright(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        //параметр для повторяющихся направлений
                         if (cord[i - 1][0]-14 >cord[i - 1][2]){
                             cord[i - 1][4]=0;
                         }
                     }
                     case (2) ->{cord[i - 1][2] = verticalLeft(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        //параметр для повторяющихся направлений
                         if (cord[i - 1][2]+14<cord[i - 1][0]){
                             cord[i - 1][4]=0;
                         }
                     }
                     case (3) -> {cord[i - 1][3] = horizontalUp(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        //параметр для повторяющихся направлений
                     if (cord[i - 1][3]-14>cord[i - 1][1]){
                         cord[i - 1][4]=0;
-                    }
+                         }
                     }
                     case (4) -> {cord[i - 1][1] = horizontalDown(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        //параметр для повторяющихся направлений
                         if (cord[i - 1][1]+14<cord[i - 1][3]){
                             cord[i - 1][4]=0;
                         }
@@ -95,44 +97,21 @@ public static boolean flag=true;
                 }
                 outWhile += cord[i - 1][4];
             }
+            //обеспечиваем читаемость с помощью отступа
             writeFile("\n");
-
-            System.out.println("вышли из фора");
         }
-        System.out.println("вышли из вайла");
-        //Вывод списка направлений лазера
-
-
-
-
-
-
-
-
-
-        //работа с файлом
-
-
-
-
-
-
-
-
-
-            // Копирование данных из файла в буфер обмена
+             // Копирование данных из файла в буфер обмена
             copiFile();
             // удаление файла
             deliteFile(workFile);
-        System.out.println("Всё готово, можете использовать данные");
+        System.out.print("Всё готово, можете использовать данные");
 
       }
 
 
+      //Срез лазера вправо
         public static int verticalRright(int x1, int y1, int x2, int y2) {
              if(x1-14>x2) {
-               // flagRight = false;
-                System.out.println("flag 1 упал");
              }
             else{
                 String vivod ="Move "+ x1+","+ y1+'\n'+"Line "+x1+","+y2+'\n';
@@ -142,10 +121,9 @@ public static boolean flag=true;
             return x1;
         }
 
+    //Срез лазера влево
         public static int verticalLeft(int x1, int y1, int x2, int y2) {
         if(x2+14<x1){
-           // flagLeft = false;
-            System.out.println("flag 2 упал");
         }
         else{
             String vivod="Move "+ x2+","+ y1+'\n'+"Line "+x2+","+y2+'\n';
@@ -156,10 +134,9 @@ public static boolean flag=true;
         }
 
 
+    ////Срез лазера вверх
         public static int horizontalUp(int x1, int y1, int x2, int y2) {
             if(y2-14>y1){
-                System.out.println("flag 3 упал");
-               // flagUp = false;
             }
             else{
                 String vivod="Move "+ x1+","+ y2+'\n'+"Line "+x2+","+y2+'\n';
@@ -170,10 +147,9 @@ public static boolean flag=true;
         }
 
 
+    //Срез лазера вниз
         public static int horizontalDown(int x1, int y1, int x2, int y2) {
             if(y1+14<y2){
-              //  flagDown = false;
-                System.out.println("flag 4 упал");
             }
             else{
                 String vivod="Move "+ x1+","+ y1+'\n'+"Line "+x2+","+y1+'\n';
@@ -183,20 +159,20 @@ public static boolean flag=true;
             return y1;
         }
 //-----------------------------------------------------------------------------------------------------------------
+    //создание файла
         public static File createFile(){
             File newFile = new File("MyFile.txt");
             try {
                 boolean created = newFile.createNewFile();
                 if (created)
-                    System.out.println("File has been created");
+                    System.out.println("Файл создан");
             } catch (IOException ex) {
-
                 System.out.println(ex.getMessage());
             }
-            System.out.println("файл создан");
             return newFile;
         }
 
+        //запись в файл
         public static void writeFile(String text){
             try {
                  fr = new FileWriter("MyFile.txt",true);
@@ -206,14 +182,13 @@ public static boolean flag=true;
                         Move 0,0
                         Layer 1
                         Layer 2
+                        
                         """);
+
                 flag=false;
-                    System.out.println("появилась запись");
                 }
                 //запись остального текста
-
                 fr.write(text);
-                System.out.println("появилась запись");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -226,6 +201,7 @@ public static boolean flag=true;
             }
         }
 
+        //Запись в буфер обмена
         public static void copiFile(){
             StringBuilder sb = new StringBuilder();
             try (BufferedReader reader = Files.newBufferedReader(Paths.get("MyFile.txt"))) {
@@ -236,8 +212,7 @@ public static boolean flag=true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println(sb);
-            System.out.println("Запись скопирована");
+            // System.out.println(sb); - для вывода в консоль скопированных данных
             String myString = sb.toString();
             StringSelection stringSelection = new StringSelection(myString);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -245,7 +220,6 @@ public static boolean flag=true;
         }
 
         public static void deliteFile(File fileName){
-            System.out.println("Файл удалён");
               fileName.delete();
         }
 
