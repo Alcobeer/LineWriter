@@ -9,26 +9,47 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 
-
 public class App {
 
 
-public static boolean flag=true;
+    public static boolean flag = true;
 
     public static int count;
-    public static  FileWriter fr = null;
+    public static FileWriter fr = null;
     public static ArrayList<Integer> tupeList = new ArrayList<>();
 
     public static void main(String[] args) {
+//
+//        if (args.length == 0 || !args[0].equals("nocmd")) {
+//            try {
+//                ProcessBuilder builder = new ProcessBuilder("start cmd.exe /k java -jar \"LineWriter.jar\" nocmd");
+//                builder.redirectErrorStream(true);
+//                Process process = builder.start();
+//
+//                InputStream is = process.getInputStream();
+//                final InputStreamReader isr = new InputStreamReader(is);
+//                final BufferedReader br = new BufferedReader(isr);
+//
+//                String line = null;
+//                while ((line = br.readLine()) != null) {
+//                    System.out.println("child process: " + line);
+//                }
+//
+//                process.waitFor();
+//            } catch (IOException | InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            return;
+//        }
         int xy = 5;
-        int outWhile =1;
-          Validation valid=new Validation();
+        int outWhile = 1;
+        Validation valid = new Validation();
         System.out.println("Введите колличество фигур : ");
         count = valid.validCount();
         int[][] cord = new int[count][xy];
 
         //берём точку начала отсчёта
-        System.out.print("Введите начальные координаты лазера"+'\n'+ "x : ");
+        System.out.print("Введите начальные координаты лазера" + '\n' + "x : ");
         double startX = valid.validCord();
         System.out.print("y : ");
         double startY = valid.validCord();
@@ -44,186 +65,179 @@ public static boolean flag=true;
             tupeList.add(valid.validTupe());
             System.out.println("Введите координаты левого верхнего угла фигуры " + i);
             System.out.print("x = ");
-            cord[i-1][0] =(int)  (valid.validCord()-startX);
+            cord[i - 1][0] = (int) (valid.validCord() - startX);
             System.out.print("y = ");
-            cord[i-1][1] =(int) (valid.validCord()-startY);
+            cord[i - 1][1] = (int) (valid.validCord() - startY);
             System.out.println("Ведите координаты правого нижнего угла фигуры " + i);
             System.out.print("x = ");
-            cord[i-1][2] =(int) (valid.validCordX((int) (cord[i-1][0]+startX))-startX);
+            cord[i - 1][2] = (int) (valid.validCordX((int) (cord[i - 1][0] + startX)) - startX);
             System.out.print("y = ");
-            cord[i-1][3] =(int) (valid.validCordY((int) (cord[i-1][1]+startY))-startY);
+            cord[i - 1][3] = (int) (valid.validCordY((int) (cord[i - 1][1] + startY)) - startY);
             //Параметр созданный для повторяющихся направлений
-            cord[i-1][4] =1;
+            cord[i - 1][4] = 1;
         }
 
 
-
-
-
-
         //создание файла
-        File workFile=createFile();
+        File workFile = createFile();
 
 //цикл, проходящий по параметрам и создающий запись в файле
-        while(outWhile>0){
-            outWhile=0;
-            for(int i = 1; i <= count; i++){
+        while (outWhile > 0) {
+            outWhile = 0;
+            for (int i = 1; i <= count; i++) {
                 switch (tupeList.get(i - 1)) {
-                    case (1) -> {
+                    case (1): {
                         cord[i - 1][0] = verticalRright(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
                         //параметр для повторяющихся направлений
-                        if (cord[i - 1][0]-14 >cord[i - 1][2]){
-                            cord[i - 1][4]=0;
+                        if (cord[i - 1][0] - 14 > cord[i - 1][2]) {
+                            cord[i - 1][4] = 0;
                         }
+                        break;
                     }
-                    case (2) ->{cord[i - 1][2] = verticalLeft(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+
+                    case (2): {
+                        cord[i - 1][2] = verticalLeft(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
                         //параметр для повторяющихся направлений
-                        if (cord[i - 1][2]+14<cord[i - 1][0]){
-                            cord[i - 1][4]=0;
+                        if (cord[i - 1][2] + 14 < cord[i - 1][0]) {
+                            cord[i - 1][4] = 0;
                         }
+                        break;
                     }
-                    case (3) -> {cord[i - 1][3] = horizontalUp(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                    case (3): {
+                        cord[i - 1][3] = horizontalUp(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
                         //параметр для повторяющихся направлений
-                    if (cord[i - 1][3]-14>cord[i - 1][1]){
-                        cord[i - 1][4]=0;
-                         }
-                    }
-                    case (4) -> {cord[i - 1][1] = horizontalDown(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
-                        //параметр для повторяющихся направлений
-                        if (cord[i - 1][1]+14<cord[i - 1][3]){
-                            cord[i - 1][4]=0;
+                        if (cord[i - 1][3] - 14 > cord[i - 1][1]) {
+                            cord[i - 1][4] = 0;
                         }
+                        break;
+                    }
+                    case (4): {
+                        cord[i - 1][1] = horizontalDown(cord[i - 1][0], cord[i - 1][1], cord[i - 1][2], cord[i - 1][3]);
+                        //параметр для повторяющихся направлений
+                        if (cord[i - 1][1] + 14 < cord[i - 1][3]) {
+                            cord[i - 1][4] = 0;
+                        }
+                        break;
                     }
                 }
                 outWhile += cord[i - 1][4];
             }
             //обеспечиваем читаемость с помощью отступа
+
             writeFile("\n");
         }
-             // Копирование данных из файла в буфер обмена
-            copiFile();
-            // удаление файла
-            deliteFile(workFile);
+        // Копирование данных из файла в буфер обмена
+        copiFile();
+        // удаление файла
+        deliteFile(workFile);
+
         System.out.print("Всё готово, можете использовать данные");
 
-      }
+    }
 
 
-      //Срез лазера вправо
-        public static int verticalRright(int x1, int y1, int x2, int y2) {
-             if(x1-14>x2) {
-             }
-            else{
-                String vivod ="Move "+ x1+","+ y1+'\n'+"Line "+x1+","+y2+'\n';
-                writeFile(vivod);
-                x1 = x1 + 15;
-             }
-            return x1;
+    //Срез лазера вправо
+    public static int verticalRright(int x1, int y1, int x2, int y2) {
+        if (x1 - 14 <= x2) {
+            String vivod = "Move " + x1 + "," + y1 + '\n' + "Line " + x1 + "," + y2 + '\n';
+            writeFile(vivod);
+            x1 = x1 + 15;
         }
+        return x1;
+    }
 
     //Срез лазера влево
-        public static int verticalLeft(int x1, int y1, int x2, int y2) {
-        if(x2+14<x1){
-        }
-        else{
-            String vivod="Move "+ x2+","+ y1+'\n'+"Line "+x2+","+y2+'\n';
+    public static int verticalLeft(int x1, int y1, int x2, int y2) {
+        if (x2 + 14 >= x1) {
+            String vivod = "Move " + x2 + "," + y1 + '\n' + "Line " + x2 + "," + y2 + '\n';
             writeFile(vivod);
-            x2=x2-15;
+            x2 = x2 - 15;
         }
-            return x2;
-        }
+        return x2;
+    }
 
 
     ////Срез лазера вверх
-        public static int horizontalUp(int x1, int y1, int x2, int y2) {
-            if(y2-14>y1){
-            }
-            else{
-                String vivod="Move "+ x1+","+ y2+'\n'+"Line "+x2+","+y2+'\n';
-                writeFile(vivod);
-                y2=y2+15;
-            }
-            return y2;
+    public static int horizontalUp(int x1, int y1, int x2, int y2) {
+        if (y2 - 14 <= y1) {
+            String vivod = "Move " + x1 + "," + y2 + '\n' + "Line " + x2 + "," + y2 + '\n';
+            writeFile(vivod);
+            y2 = y2 + 15;
         }
+        return y2;
+    }
 
 
     //Срез лазера вниз
-        public static int horizontalDown(int x1, int y1, int x2, int y2) {
-            if(y1+14<y2){
-            }
-            else{
-                String vivod="Move "+ x1+","+ y1+'\n'+"Line "+x2+","+y1+'\n';
-                writeFile(vivod);
-                y1=y1-15;
-            }
-            return y1;
+    public static int horizontalDown(int x1, int y1, int x2, int y2) {
+        if (y1 + 14 >= y2) {
+            String vivod = "Move " + x1 + "," + y1 + '\n' + "Line " + x2 + "," + y1 + '\n';
+            writeFile(vivod);
+            y1 = y1 - 15;
         }
-//-----------------------------------------------------------------------------------------------------------------
-    //создание файла
-        public static File createFile(){
-            File newFile = new File("MyFile.txt");
-            try {
-                boolean created = newFile.createNewFile();
-                if (created)
-                    System.out.println("Файл создан");
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            return newFile;
-        }
-
-        //запись в файл
-        public static void writeFile(String text){
-            try {
-                 fr = new FileWriter("MyFile.txt",true);
-                //единократная запись заголовка
-                if(flag){
-                fr.write("""
-                        Move 0,0
-                        Layer 1
-                        Layer 2
-                        
-                        """);
-
-                flag=false;
-                }
-                //запись остального текста
-                fr.write(text);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    fr.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        //Запись в буфер обмена
-        public static void copiFile(){
-            StringBuilder sb = new StringBuilder();
-            try (BufferedReader reader = Files.newBufferedReader(Paths.get("MyFile.txt"))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line).append(System.lineSeparator());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // System.out.println(sb); - для вывода в консоль скопированных данных
-            String myString = sb.toString();
-            StringSelection stringSelection = new StringSelection(myString);
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
-        }
-
-        public static void deliteFile(File fileName){
-              fileName.delete();
-        }
-
-
+        return y1;
     }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    //создание файла
+    public static File createFile() {
+        File newFile = new File("MyFile.txt");
+        try {
+            boolean created = newFile.createNewFile();
+//                if (created)
+//                    System.out.println("Файл создан");
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return newFile;
+    }
+
+    //запись в файл
+    public static void writeFile(String text) {
+        try {
+            fr = new FileWriter("MyFile.txt", true);
+            //единократная запись заголовка
+            if (flag) {
+                fr.write("Move 0,0"+"\n"+"Layer 1\nLayer 2\n\n");
+
+                flag = false;
+            }
+            //запись остального текста
+            fr.write(text);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //Запись в буфер обмена
+    public static void copiFile() {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get("MyFile.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append(System.lineSeparator());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // System.out.println(sb); //- для вывода в консоль скопированных данных
+        String myString = sb.toString();
+        StringSelection stringSelection = new StringSelection(myString);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
+
+    public static void deliteFile(File fileName) {
+        fileName.delete();
+    }
+
+
+}
 
 

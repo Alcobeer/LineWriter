@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="LineWriter:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/LineWriter_jar</output-path>
+    <root id="archive" name="LineWriter.jar">
+      <element id="module-output" name="LineWriter" />
+    </root>
+  </artifact>
+</component>
