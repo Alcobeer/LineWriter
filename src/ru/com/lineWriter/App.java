@@ -56,29 +56,46 @@ public class App {
 
             System.out.println("Введите направление движения лазера в фигуре номер " + i);
             tupeList.add(valid.validTupe());
-            if (tupeList.get(i - 1) != 6)
+
+            if (tupeList.get(i - 1) < 5)
                 System.out.println("Введите координаты левого верхнего угла фигуры " + i);
-            else System.out.println("Введите координаты правого верхнего угла фигуры " + i);
+            else System.out.println("Введите координаты  верхней точки  " + i);
             System.out.print("x = ");
             cord[i - 1][0] = (int) (valid.validCord() - startX);
             System.out.print("y = ");
             cord[i - 1][1] = (int) (valid.validCord() - startY);
             // добавление координат, если у нас пирамида
 
-            if (tupeList.get(i - 1) > 4) {
-                if (tupeList.get(i - 1) != 6)
-                    System.out.println("Введите координаты левого нижнего угла фигуры " + i);
-                else System.out.println("Введите координаты правого нижнего угла фигуры " + i);
-                System.out.print("y2 = ");
-                cord[i - 1][6] = (int) (valid.validCord() - startY);
-            }
-            if (tupeList.get(i - 1) != 6)
+//            if (tupeList.get(i - 1) > 4) {
+//                if (tupeList.get(i - 1) != 6)
+//                    System.out.println("Введите координаты левого нижнего угла фигуры " + i);
+//                else System.out.println("Введите координаты правого нижнего угла фигуры " + i);
+//                System.out.print("y2 = ");
+//                cord[i - 1][6] = (int) (valid.validCord() - startY);
+//            }
+            if (tupeList.get(i - 1) < 5)
                 System.out.println("Ведите координаты X правого нижнего угла фигуры " + i);
-            else System.out.println("Введите координаты левого нижнего угла фигуры " + i);
+            else System.out.println("Введите координаты нижней точки " + i);
             System.out.print("x = ");
             cord[i - 1][2] = (int) (valid.validCord() - startX);
             System.out.print("y = ");
             cord[i - 1][3] = (int) (valid.validCordY((int) (cord[i - 1][1] + startY)) - startY);
+
+            if (tupeList.get(i - 1) > 4) {
+                System.out.print("Введите длину сдвига : ");
+                cord[i - 1][5] = (int) (valid.validCord() - startX);
+                //x1
+                cord[i - 1][0] -= cord[i - 1][5];
+                // cord[i - 1][1] -=cord[i - 1][5];
+                cord[i - 1][2] -= cord[i - 1][5];
+                //cord[i - 1][3] =cord[i - 1][1];
+
+                cord[i - 1][6] = cord[i - 1][3];
+                cord[i - 1][7] = cord[i - 1][0]+ cord[i - 1][5]*2;
+                cord[i - 1][8] = cord[i - 1][1];
+                cord[i - 1][5] = cord[i - 1][5] * 2 + cord[i - 1][2];
+
+            }
 
 
             //Параметр созданный для повторяющихся направлений
@@ -128,23 +145,26 @@ public class App {
                         break;
                     }
                     case (5): {
-                        cord[i - 1][1] = corner(cord[i - 1][0], cord[i - 1][1],
-                                (cord[i - 1][2] + (cord[i - 1][1] - cord[i - 1][6])),
-                                cord[i - 1][3], cord[i - 1][6]);
+                        cord[i - 1][7] = cornerLeft(cord[i - 1][7],
+                                cord[i - 1][8],
+                                (cord[i - 1][2] + (cord[i - 1][7] - cord[i - 1][0])),
+                                cord[i - 1][6], cord[i - 1][0]);
 
                         //параметр для повторяющихся направлений
-                        if (cord[i - 1][1] + 14 < cord[i - 1][6]) {
+                        if (cord[i - 1][7] + 14 < cord[i - 1][0]) {
                             cord[i - 1][4] = 0;
                         }
                         break;
                     }
                     case (6): {
-                        cord[i - 1][1] = corner(cord[i - 1][0], cord[i - 1][1],
-                                (cord[i - 1][2] - (cord[i - 1][1] - cord[i - 1][6])),
-                                cord[i - 1][3], cord[i - 1][6]);
+                        cord[i - 1][0] = cornerRight(cord[i - 1][0],
+                                cord[i - 1][1],
+                                (cord[i - 1][5] - (cord[i - 1][7] - cord[i - 1][0])),
+                                cord[i - 1][3],
+                                cord[i - 1][7]);
 
                         //параметр для повторяющихся направлений
-                        if (cord[i - 1][1] + 14 < cord[i - 1][6]) {
+                        if (cord[i - 1][0] - 14 > cord[i - 1][7]) {
                             cord[i - 1][4] = 0;
                         }
                         break;
@@ -228,13 +248,22 @@ public class App {
         return y1;
     }
 
-    public static int corner(int x1, int y1, int x2, int y2, int y3) {
-        if (y1 + 14 >= y3) {
+    public static int cornerLeft(int x1, int y1, int x2, int y2, int x3) {
+        if (x1 + 14 >= x3) {
             String vivod = "Move " + x1 + "," + y1 + '\n' + "Line " + x2 + "," + y2 + '\n';
             writeFile(vivod);
-            y1 = y1 - 15;
+            x1 = x1 - 15;
         }
-        return y1;
+        return x1;
+    }
+
+    public static int cornerRight(int x1, int y1, int x2, int y2, int x3) {
+        if (x1 - 14 <= x3) {
+            String vivod = "Move " + x1 + "," + y1 + '\n' + "Line " + x2 + "," + y2 + '\n';
+            writeFile(vivod);
+            x1 = x1 + 15;
+        }
+        return x1;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
