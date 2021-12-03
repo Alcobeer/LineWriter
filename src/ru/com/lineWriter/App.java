@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
+
 
 // конструктор класса приложения
 
@@ -274,7 +274,6 @@ public class App {
     //-----------------------------------------------------------------------------------------------------------------
     //создание файла
     public static File createFile() {
-        File newFile = new File("MyFile.txt");
         //проверка, если что-то не работает
 //            try {
 //                boolean created = newFile.createNewFile();
@@ -283,7 +282,7 @@ public class App {
 //            } catch (IOException ex) {
 //                System.out.println(ex.getMessage());
 //            }
-        return newFile;
+        return new File("MyFile.txt");
     }
 
     //запись в файл
