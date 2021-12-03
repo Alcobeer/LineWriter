@@ -82,18 +82,23 @@ public class App {
             cord[i - 1][3] = (int) (valid.validCordY((int) (cord[i - 1][1] + startY)) - startY);
 
             if (tupeList.get(i - 1) > 4) {
-                System.out.print("Введите длину сдвига : ");
-                cord[i - 1][5] = (int) (valid.validCord() - startX);
+                System.out.print("Введите длину сдвига вбок : ");
+                int vbok = (int) valid.validCord() ;
+                System.out.println("Введите длину сдвига вверх");
+                int vverh= (int) valid.validCord();
                 //x1
-                cord[i - 1][0] -= cord[i - 1][5];
-                // cord[i - 1][1] -=cord[i - 1][5];
-                cord[i - 1][2] -= cord[i - 1][5];
-                //cord[i - 1][3] =cord[i - 1][1];
+
+                cord[i - 1][7] = cord[i - 1][0]+ vbok;
+                cord[i - 1][5] =  cord[i - 1][2]+vbok;
+                cord[i - 1][0] = cord[i - 1][0]-vbok;
+                 cord[i - 1][1] =cord[i - 1][1]+vverh;
+                cord[i - 1][2] = cord[i - 1][2]-vbok;
+                cord[i - 1][3] =cord[i - 1][3]-vverh;
 
                 cord[i - 1][6] = cord[i - 1][3];
-                cord[i - 1][7] = cord[i - 1][0]+ cord[i - 1][5]*2;
+
                 cord[i - 1][8] = cord[i - 1][1];
-                cord[i - 1][5] = cord[i - 1][5] * 2 + cord[i - 1][2];
+
 
             }
 
